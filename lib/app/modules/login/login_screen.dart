@@ -1,0 +1,150 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:ciilaabokk_ouvrier_user/app/modules/auths/auth_controller.dart';
+import 'package:ciilaabokk_ouvrier_user/app/modules/signup/signup_screen.dart';
+import 'package:logger/logger.dart';
+
+final logger = Logger();
+
+class LoginScreen extends GetView<AuthController> {
+  const LoginScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // print("LoginScreen received args: ${args['previousRoute']}");
+    // print("Previous route in LoginScreen: ${Get.previousRoute}");
+    return Scaffold(
+      backgroundColor: Color(0xFFF5F5F5),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(24),
+          child: Form(
+            key: controller.loginFormKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  "Login",
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 0, 173, 253),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 30),
+                Obx(
+                  () => TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Svp veuillez remplir le champs";
+                      }
+                      return null;
+                    },
+                    controller: controller.emailController,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: Color.fromARGB(255, 10, 151, 217),
+                      ),
+                      labelText: "Email ou numéro de téléphone",
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 0, 173, 253),
+                      ),
+                      errorText: controller.isEmailValid.value
+                          ? null
+                          : "Email ou numéro de téléphone invalide",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    keyboardType: TextInputType.phone,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Obx(
+                  () => TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Svp veuillez remplir le champs";
+                      }
+                      return null;
+                    },
+                    controller: controller.passwordController,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Color.fromARGB(255, 0, 173, 253),
+                      ),
+                      labelText: "Mot de passe",
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 0, 173, 253),
+                      ),
+                      errorText: controller.isPasswordValid.value
+                          ? null
+                          : "Mot de passe invalide",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    obscureText: true,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Obx(
+                  () => controller.isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Color.fromARGB(255, 0, 173, 253),
+                          ),
+                        )
+                      : ElevatedButton(
+                          onPressed: () => controller.login(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 0, 173, 253),
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            "Se connecter",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                ),
+                SizedBox(height: 20),
+                TextButton(
+                  onPressed: () => Get.offAll(SignupScreen()),
+                  child: Text(
+                    "Créer un compte",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 0, 173, 253),
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

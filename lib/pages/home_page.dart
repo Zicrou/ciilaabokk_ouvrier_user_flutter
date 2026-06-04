@@ -1,0 +1,89 @@
+// /lib/pages/home_page.dart
+import 'package:ciilaabokk_ouvrier_user/app/modules/auths/auth_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/repositories/profile_repositories.dart';
+import 'package:ciilaabokk_ouvrier_user/app/modules/login/login_screen.dart';
+import 'package:ciilaabokk_ouvrier_user/app/modules/signup/signup_screen.dart';
+
+import 'package:logger/logger.dart';
+
+Logger logger = Logger();
+
+class HomePage extends StatelessWidget {
+  final AuthController controller = Get.put(AuthController());
+
+  // const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Live Video App"),
+        backgroundColor: Color.fromARGB(255, 0, 173, 253),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout, color: Colors.red),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Déconnexion"),
+                    content: Text(
+                      "Êtes-vous sûr de vouloir vous déconnecter ?",
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text("Annuler"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: Text("Se déconnecter"),
+                        onPressed: () async {
+                          Navigator.of(context).pop(); // Close the dialog
+                          // await controller.logout();
+                          Get.to(() => LoginScreen());
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      backgroundColor: Color(0xFFF5F5F5),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text("Login"),
+              onPressed: () => Get.to(LoginScreen()),
+              // onPressed: () => Get.to(HostPage()),
+            ),
+            ElevatedButton(
+              child: const Text("Sign Up"),
+              onPressed: () {
+                logger.i("Navigating to Sign Up Page...");
+                Get.to(SignupScreen());
+              },
+              // () => Get.to(ViewerPage()),
+            ),
+            ElevatedButton(
+              child: const Text("Videos"),
+              onPressed: () {
+                logger.i("Another page...");
+              },
+              // () => Get.to(ViewerPage()),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
