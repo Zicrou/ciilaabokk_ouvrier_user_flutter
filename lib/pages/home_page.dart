@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
                         child: Text("Se déconnecter"),
                         onPressed: () async {
                           Navigator.of(context).pop(); // Close the dialog
-                          // await controller.logout();
+                          await controller.logout();
                           Get.to(() => LoginScreen());
                         },
                       ),

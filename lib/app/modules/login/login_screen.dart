@@ -42,7 +42,7 @@ class LoginScreen extends GetView<AuthController> {
                       }
                       return null;
                     },
-                    controller: controller.emailController,
+                    controller: controller.loginController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.email,
@@ -52,7 +52,7 @@ class LoginScreen extends GetView<AuthController> {
                       labelStyle: TextStyle(
                         color: Color.fromARGB(255, 0, 173, 253),
                       ),
-                      errorText: controller.isEmailValid.value
+                      errorText: controller.isLoginValid.value
                           ? null
                           : "Email ou numéro de téléphone invalide",
                       filled: true,

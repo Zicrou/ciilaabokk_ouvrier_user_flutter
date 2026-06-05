@@ -166,7 +166,39 @@ class SignupScreen extends GetView<AuthController> {
                   obscureText: true,
                 ),
                 SizedBox(height: 20),
-
+                TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Svp veuillez remplir le champs";
+                    }
+                    return null;
+                  },
+                  controller: controller.password_confirmation_controller,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      color: Color.fromARGB(255, 0, 173, 253),
+                    ),
+                    labelText: "Confirmer mot de passe",
+                    labelStyle: TextStyle(
+                      color: Color.fromARGB(255, 0, 173, 253),
+                    ),
+                    errorText: controller.isPasswordValid.value
+                        ? null
+                        : "Le mot de passe et le mot de passe de confirmation sont différents",
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  obscureText: true,
+                ),
                 SizedBox(height: 20),
                 Obx(
                   () => controller.isLoading

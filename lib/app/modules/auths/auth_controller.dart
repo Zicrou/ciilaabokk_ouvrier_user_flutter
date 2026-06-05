@@ -22,12 +22,14 @@ class AuthController extends GetxController {
   var phoneNumberController = TextEditingController();
   var passwordController = TextEditingController();
   var nameController = TextEditingController();
+  var loginController = TextEditingController();
   var emailController = TextEditingController();
-
+  var password_confirmation_controller = TextEditingController();
   var isPhoneNumberValid = true.obs;
   var isPasswordValid = true.obs;
   var isNameValid = true.obs;
   var isEmailValid = true.obs;
+  var isLoginValid = true.obs;
   // var args = Get.arguments;
 
   void onInit() {
@@ -40,14 +42,14 @@ class AuthController extends GetxController {
       _isLoading.value = true;
       if (loginFormKey.currentState!.validate()) {
         loginFormKey.currentState!.save();
-        String email = emailController.text.trim();
+        String login = loginController.text.trim();
         String password = passwordController.text.trim();
 
         // Call the post Api method to send data
-        var userInfo = await authServices.login(email, password);
+        var userInfo = await authServices.login(login, password);
         logger.i("Response Auth Controller: ${userInfo}");
 
-        emailController.clear();
+        loginController.clear();
         passwordController.clear();
 
         authProvider.user = userInfo;
@@ -55,7 +57,7 @@ class AuthController extends GetxController {
         print("Current route: ${Get.currentRoute}"); // Debugging line
         print("Previous route: ${Get.previousRoute}"); // Debugging line
         // Get.offAll(() => VentesScreen());
-        Get.toNamed(Get.previousRoute);
+        Get.to(HomePage());
         // if (Get.previousRoute == Routes.videosFollowing) {
         //   Get.toNamed(
         //     Routes.videosFollowing,
@@ -80,6 +82,7 @@ class AuthController extends GetxController {
     String password = passwordController.text.trim();
     String name = nameController.text.trim();
     String email = emailController.text.trim();
+    String password_confirmation = password_confirmation_controller.text.trim();
     try {
       if (signupFormKey.currentState!.validate()) {
         //signupFormKey.currentState!.save();
@@ -89,10 +92,11 @@ class AuthController extends GetxController {
           name,
           phoneNumber,
           password,
+          password_confirmation,
           email,
         );
         authProvider.userRegister = await userRegistred;
-        Get.offAll(() => LoginScreen());
+        Get.offAll(() => HomePage());
         goodMessage("Succés: Inscription");
       }
     } catch (e) {
@@ -106,12 +110,12 @@ class AuthController extends GetxController {
   }
 
   Future<void> logout() async {
-    Get.offAll(() => LoginScreen());
     // Rebind if need it
     goodMessage("Déconneté");
     try {
       await authServices.signout();
       // authProvider.reset();
+      Get.offAll(() => LoginScreen());
     } catch (e) {
       logger.w("Error during signout: ${e}");
     }

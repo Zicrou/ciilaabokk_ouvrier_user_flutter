@@ -22,7 +22,7 @@ class User {
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    phoneNumber = json['phone'];
+    phoneNumber = json['phone_number'];
     email = json['email'];
     deletedAt = json['deleted_at'];
     createdAt = json['created_at'];

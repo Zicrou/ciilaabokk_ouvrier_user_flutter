@@ -16,14 +16,14 @@ class AuthRepositories {
   final _authProvider = Get.find<AuthProvider>();
   final _apiProvider = Get.find<ApiProvider>();
 
-  Future<UserInfo> login(String email, String password) async {
+  Future<UserInfo> login(String login, String password) async {
     try {
       logger.i(
-        'Auth Repositories: login with email => $email and password => $password',
+        'Auth Repositories: login with login => $login and password => $password',
       );
       final response = await _apiProvider.postN(
         loginEndpoint,
-        {"email": email, "password": password},
+        {"login": login, "password": password},
         // options: Options(headers: {'Content-type': 'application/json'}),
       );
       print("Response login from Auth Repositories login : ${response}");
@@ -43,6 +43,8 @@ class AuthRepositories {
       }
       _authProvider.isAuthenticated = true;
       _authProvider.authToken = userInfo.token!;
+      print("User: ${userInfo.toString()}");
+      print("User token: ${_authProvider.authToken}");
       // logger.i('authToken: ${_authProvider.authToken}');
       // logger.i("userInfo from Repositories: ${userInfo.toString()}");
       return userInfo;
@@ -56,6 +58,7 @@ class AuthRepositories {
     String phone,
     String password,
     String email,
+    String password_confirmation,
   ) async {
     try {
       logger.i(
@@ -63,7 +66,13 @@ class AuthRepositories {
       );
       final response = await _apiProvider.postN(
         registerEndPoint,
-        {'name': name, 'phone': phone, 'password': password, 'email': email},
+        {
+          'name': name,
+          'phone_number': phone,
+          'password': password,
+          'email': email,
+          'password_confirmation': password_confirmation,
+        },
         // options: Options(headers: {'Content-type': 'application/json'}),
       );
 
