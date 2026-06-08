@@ -1,8 +1,11 @@
 // /lib/pages/home_page.dart
+import 'package:ciilaabokk_ouvrier_user/app/data/repositories/ouvriers_repository.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/auths/auth_controller.dart';
+import 'package:ciilaabokk_ouvrier_user/app/modules/ouvriers/ouvriers_binding.dart';
+import 'package:ciilaabokk_ouvrier_user/app/modules/ouvriers/ouvriers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ciilaabokk_ouvrier_user/app/data/repositories/profile_repositories.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/repositories/profile_repository.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/login/login_screen.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/signup/signup_screen.dart';
 
@@ -75,9 +78,10 @@ class HomePage extends StatelessWidget {
               // () => Get.to(ViewerPage()),
             ),
             ElevatedButton(
-              child: const Text("Videos"),
+              child: const Text("Ouvriers"),
               onPressed: () {
-                logger.i("Another page...");
+                logger.i("Ouvriers");
+                Get.offAll(() => OuvriersScreen(), binding: OuvriersBinding());
               },
               // () => Get.to(ViewerPage()),
             ),

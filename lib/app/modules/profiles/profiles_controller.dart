@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import 'package:ciilaabokk_ouvrier_user/app/data/repositories/profile_repositories.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/repositories/profile_repository.dart';
 
 class ProfilesController extends GetxController {
   var isLoading = false.obs;

@@ -1,15 +1,13 @@
 import 'package:ciilaabokk_ouvrier_user/app/data/repositories/ouvriers_repository.dart';
-import 'package:ciilaabokk_ouvrier_user/app/modules/ouvriers/ouvriersController.dart';
 import 'package:get/get.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/providers/auth_providers.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/auths/auth_controller.dart';
 
-class AuthBinding extends Bindings {
+class OuvriersBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(() => AuthProvider());
     Get.put(() => AuthController());
-    Get.put(() => OuvriersRepository());
-    Get.put(() => OuvriersController());
+    // Get.lazyPut(() => OuvriersRepository());
   }
 }

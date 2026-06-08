@@ -1,3 +1,6 @@
+import 'package:ciilaabokk_ouvrier_user/app/modules/ouvrier/ouvrierController.dart';
+import 'package:ciilaabokk_ouvrier_user/app/modules/ouvriers/ouvriersController.dart';
+import 'package:ciilaabokk_ouvrier_user/app/modules/ouvriers/ouvriers_binding.dart';
 import 'package:get/get.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/providers/api_providers.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/providers/auth_providers.dart';
@@ -21,5 +24,7 @@ class AppInitialBindings extends Bindings {
     // safe to find dependencies
     Get.lazyPut(() => SignupController());
     Get.lazyPut(() => AuthController());
+    Get.lazyPut(() => OuvriersController());
+    Get.lazyPut(() => OuvrierController());
   }
 }

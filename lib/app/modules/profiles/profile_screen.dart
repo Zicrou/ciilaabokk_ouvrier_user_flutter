@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ciilaabokk_ouvrier_user/app/data/repositories/profile_repositories.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/repositories/profile_repository.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/profiles/profiles_controller.dart';
 
 class ProfileScreen extends StatefulWidget {

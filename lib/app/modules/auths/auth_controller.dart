@@ -1,3 +1,4 @@
+import 'package:ciilaabokk_ouvrier_user/app/modules/ouvriers/ouvriers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/providers/auth_providers.dart';
