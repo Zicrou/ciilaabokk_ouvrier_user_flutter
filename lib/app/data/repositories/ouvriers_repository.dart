@@ -1,5 +1,7 @@
 import 'package:ciilaabokk_ouvrier_user/app/core/exceptions/network_exceptions.dart';
 import 'package:ciilaabokk_ouvrier_user/app/core/values/endpoints.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/models/departement.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/models/metier.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/ouvrier_info.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/providers/api_providers.dart';
 import 'package:get/get.dart';
@@ -73,5 +75,45 @@ class OuvriersRepository {
     return OuvrierInfo.fromJson(response);
 
     //fromJson(response['produit']);
+  }
+
+  Future<dynamic> selectFilterMetierByDomaine(int? domaine_id) async {
+    var domaineId = domaine_id;
+    // final regionId = json["region_id"];
+
+    var params = 'domaine_id=';
+    if (domaineId != null) {
+      params = 'domaine_id=$domaineId';
+    }
+
+    final response = await _apiProvider.get(
+      '$selectFilterDomaineEndpoint?$params',
+    );
+    final res = response as List;
+    print("Response filtered metiers: ${response}");
+    print("Response filtered metiers: ${response[0]}");
+
+    // The return type is List dynamic
+    return res.map((m) => Metier.fromJson(m)).toList();
+  }
+
+  Future<dynamic> selectFilterDepartementByRegion(int? region_id) async {
+    var regionId = region_id;
+    // final regionId = json["region_id"];
+
+    var params = 'region_id=';
+    if (regionId != null) {
+      params = 'region_id=$regionId';
+    }
+
+    final response = await _apiProvider.get(
+      '$selectFilterRegionEndpoint?$params',
+    );
+    final res = response as List;
+    print("Response filtered departements: ${response}");
+    print("Response filtered departements: ${response[0]}");
+
+    // The return type is List dynamic
+    return res.map((m) => Departement.fromJson(m)).toList();
   }
 }

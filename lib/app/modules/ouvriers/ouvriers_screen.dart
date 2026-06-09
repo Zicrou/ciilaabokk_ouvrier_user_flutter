@@ -2,6 +2,7 @@ import 'package:ciilaabokk_ouvrier_user/app/data/models/departement.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/domaine.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/metier.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/region.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/repositories/ouvriers_repository.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/login/login_screen.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/ouvrier/ouvrierScreen.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/ouvriers/ouvriersController.dart';
@@ -197,30 +198,49 @@ class OuvriersScreen extends StatelessWidget {
                                           borderSide: BorderSide.none,
                                         ),
                                       ),
-                                      items: controller.regionlist.isNotEmpty
-                                          ? controller.regionlist.map((region) {
-                                              return DropdownMenuItem<Region>(
-                                                value: region,
-                                                child: Text(
-                                                  region!.name!,
-                                                  style: TextStyle(
-                                                    color: Color.fromARGB(
-                                                      255,
-                                                      0,
-                                                      173,
-                                                      253,
+                                      items: [
+                                        const DropdownMenuItem<Region>(
+                                          value: null,
+                                          child: Text(
+                                            "Toutes les regions",
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                255,
+                                                0,
+                                                173,
+                                                253,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        ...controller.regionlist.isNotEmpty
+                                            ? controller.regionlist.map((
+                                                region,
+                                              ) {
+                                                return DropdownMenuItem<Region>(
+                                                  value: region,
+                                                  child: Text(
+                                                    region!.name!,
+                                                    style: TextStyle(
+                                                      color: Color.fromARGB(
+                                                        255,
+                                                        0,
+                                                        173,
+                                                        253,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              );
-                                            }).toList()
-                                          : [],
+                                                );
+                                              }).toList()
+                                            : [],
+                                      ],
                                       onChanged: (value) {
-                                        controller.selectedRegion.value =
-                                            value!;
+                                        controller.selectedRegion.value = value;
                                         print(
-                                          "Selected Region Screen: ${controller.selectedRegion.value!.id}",
+                                          "Selected Region Screen: ${controller.selectedRegion.value?.id}",
                                         );
+                                        controller.selecFilterRegion();
                                       },
                                     ),
                                   ),
@@ -264,30 +284,45 @@ class OuvriersScreen extends StatelessWidget {
                                           borderSide: BorderSide.none,
                                         ),
                                       ),
-                                      items:
-                                          controller.departementList.isNotEmpty
-                                          ? controller.departementList.map((
-                                              departement,
-                                            ) {
-                                              return DropdownMenuItem<
-                                                Departement
-                                              >(
-                                                value: departement,
-                                                child: Text(
-                                                  departement!.name!,
-                                                  style: TextStyle(
-                                                    color: Color.fromARGB(
-                                                      255,
-                                                      0,
-                                                      173,
-                                                      253,
+                                      items: [
+                                        const DropdownMenuItem<Departement>(
+                                          value: null,
+                                          child: Text(
+                                            "Tous les départements",
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                255,
+                                                0,
+                                                173,
+                                                253,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        ...controller.departementList.isNotEmpty
+                                            ? controller.departementList.map((
+                                                departement,
+                                              ) {
+                                                return DropdownMenuItem<
+                                                  Departement
+                                                >(
+                                                  value: departement,
+                                                  child: Text(
+                                                    departement!.name!,
+                                                    style: TextStyle(
+                                                      color: Color.fromARGB(
+                                                        255,
+                                                        0,
+                                                        173,
+                                                        253,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              );
-                                            }).toList()
-                                          : [],
-
+                                                );
+                                              }).toList()
+                                            : [],
+                                      ],
                                       onChanged: (value) {
                                         controller.selectedDepartement.value =
                                             value!;
@@ -335,33 +370,52 @@ class OuvriersScreen extends StatelessWidget {
                                           borderSide: BorderSide.none,
                                         ),
                                       ),
-                                      items: controller.domaineList.isNotEmpty
-                                          ? controller.domaineList.map((
-                                              domaine,
-                                            ) {
-                                              return DropdownMenuItem<Domaine>(
-                                                value: domaine,
-                                                child: Text(
-                                                  domaine!.name!,
-                                                  style: TextStyle(
-                                                    color: Color.fromARGB(
-                                                      255,
-                                                      0,
-                                                      173,
-                                                      253,
+                                      items: [
+                                        const DropdownMenuItem<Domaine>(
+                                          value: null,
+                                          child: Text(
+                                            "Tous les domaines",
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                255,
+                                                0,
+                                                173,
+                                                253,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        ...controller.domaineList.isNotEmpty
+                                            ? controller.domaineList.map((
+                                                domaine,
+                                              ) {
+                                                return DropdownMenuItem<
+                                                  Domaine
+                                                >(
+                                                  value: domaine,
+                                                  child: Text(
+                                                    domaine!.name!,
+                                                    style: TextStyle(
+                                                      color: Color.fromARGB(
+                                                        255,
+                                                        0,
+                                                        173,
+                                                        253,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              );
-                                            }).toList()
-                                          : [],
-
+                                                );
+                                              }).toList()
+                                            : [],
+                                      ],
                                       onChanged: (value) {
                                         controller.selectedDomaine.value =
-                                            value!;
+                                            value;
                                         print(
-                                          "Selected Domaine Screen: ${controller.selectedDomaine.value!.id}",
+                                          "Selected Domaine Screen: ${controller.selectedDomaine.value?.id}",
                                         );
+                                        controller.selecFilterDomaine();
                                       },
                                     ),
                                   ),
@@ -403,25 +457,43 @@ class OuvriersScreen extends StatelessWidget {
                                           borderSide: BorderSide.none,
                                         ),
                                       ),
-                                      items: controller.metierList.isNotEmpty
-                                          ? controller.metierList.map((metier) {
-                                              return DropdownMenuItem<Metier>(
-                                                value: metier,
-                                                child: Text(
-                                                  metier!.name!,
-                                                  style: TextStyle(
-                                                    color: Color.fromARGB(
-                                                      255,
-                                                      0,
-                                                      173,
-                                                      253,
+                                      items: [
+                                        const DropdownMenuItem<Metier>(
+                                          value: null,
+                                          child: Text(
+                                            "Tous les metiers",
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                255,
+                                                0,
+                                                173,
+                                                253,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        ...controller.metierList.isNotEmpty
+                                            ? controller.metierList.map((
+                                                metier,
+                                              ) {
+                                                return DropdownMenuItem<Metier>(
+                                                  value: metier,
+                                                  child: Text(
+                                                    metier!.name!,
+                                                    style: TextStyle(
+                                                      color: Color.fromARGB(
+                                                        255,
+                                                        0,
+                                                        173,
+                                                        253,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              );
-                                            }).toList()
-                                          : [],
-
+                                                );
+                                              }).toList()
+                                            : [],
+                                      ],
                                       onChanged: (value) {
                                         controller.selectedMetier.value = value;
                                         print(
@@ -490,6 +562,7 @@ class OuvriersScreen extends StatelessWidget {
                                               foregroundColor: Colors.white,
                                               padding: EdgeInsets.symmetric(
                                                 vertical: 16,
+                                                horizontal: 25,
                                               ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -528,6 +601,25 @@ class OuvriersScreen extends StatelessWidget {
                 if (controller.isLoading.value) {
                   return Center(child: CircularProgressIndicator());
                 }
+                print(
+                  "ouvrierList is empty: ${controller.ouvrierList[0].ouvriers.isEmpty}",
+                );
+                if (controller.ouvrierList[0].ouvriers.isEmpty) {
+                  return Column(
+                    children: [
+                      Center(
+                        child: Card(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 50,
+                          ),
+                          child: Center(child: const Text("Pas d'ouvriers")),
+                        ),
+                      ),
+                    ],
+                  );
+                  // );
+                }
                 // Default widget if none of the above conditions are met
                 return ListView.builder(
                   //
@@ -546,7 +638,7 @@ class OuvriersScreen extends StatelessWidget {
                               Get.to(Ouvrierscreen(), arguments: o),
                             },
                             title: Text(
-                              o.name!,
+                              "${o.name!} ${o.phoneNumber}",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text.rich(

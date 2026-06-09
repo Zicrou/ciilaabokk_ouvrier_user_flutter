@@ -108,12 +108,46 @@ class OuvriersController extends GetxController {
           researchedData,
         );
         ouvrierList.assignAll([response]);
+        print("is ouvriers empty : ${ouvrierList[0].ouvriers.isEmpty}");
       } catch (e) {
         print("Error searching: ${e}");
         throw Exception("Erreur searching ${e.toString()}");
       } finally {
         isLoading(false);
       }
+    }
+  }
+
+  Future<dynamic> selecFilterRegion() async {
+    var selected_region = selectedRegion.value?.id;
+    try {
+      isLoading(true);
+      final response = await _ouvriersRepository
+          .selectFilterDepartementByRegion(selected_region);
+      departementList.assignAll(response);
+      print(departementList.toString());
+    } catch (e) {
+      print("Error searching: ${e}");
+      throw Exception("Erreur searching ${e.toString()}");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<dynamic> selecFilterDomaine() async {
+    var selected_domaine = selectedDomaine.value?.id;
+    try {
+      isLoading(true);
+      final response = await _ouvriersRepository.selectFilterMetierByDomaine(
+        selected_domaine,
+      );
+      metierList.assignAll(response);
+      print(metierList.toString());
+    } catch (e) {
+      print("Error searching: ${e}");
+      throw Exception("Erreur searching ${e.toString()}");
+    } finally {
+      isLoading(false);
     }
   }
 
