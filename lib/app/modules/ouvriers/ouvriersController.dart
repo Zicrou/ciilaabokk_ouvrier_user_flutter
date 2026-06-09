@@ -32,13 +32,13 @@ class OuvriersController extends GetxController {
   var selectedDepartement = Rx<Departement?>(null);
   var selectedDomaine = Rx<Domaine?>(null);
   var selectedMetier = Rx<Metier?>(null);
+  final GlobalKey<FormState> rechercheKeyForm = GlobalKey<FormState>();
 
   @override
   void onInit() {
     super.onInit();
     // Initialize any necessary data or state here
     fetchOuvriers();
-    searchedOuvriers();
   }
 
   Future<void> fetchOuvriers() async {
@@ -48,6 +48,24 @@ class OuvriersController extends GetxController {
       print("Call Ouvriers repository");
       var response = await _ouvriersRepository.listOuvriers();
       print("Ouvrier from ouvrierController: ${response}");
+      var metiers = response.metiers;
+      var domaines = response.domaines;
+      var regions = response.regions;
+      var departements = response.departements;
+      if (metiers.value != null) {
+        for (var metier in metiers) metierList.add(metier);
+      }
+      if (domaines.value != null) {
+        for (var domaine in domaines) domaineList.add(domaine);
+      }
+
+      if (regions.value != null) {
+        for (var region in regions) regionlist.add(region);
+      }
+
+      if (departements.value != null) {
+        for (var departement in departements) departementList.add(departement);
+      }
 
       //listeresponse = await _authServices.getAllVentes();
       ouvrierList.assignAll([response]);
@@ -61,24 +79,53 @@ class OuvriersController extends GetxController {
   }
 
   Future<dynamic> searchedOuvriers() async {
-    var tel = telephone.text.trim();
-    final researchedData = {
-      "region_id": "", //selectedRegion?.value?.id,
-      "departement_id": "", //selectedDepartement?.value?.id,
-      "domaine_id": 1, //selectedDomaine?.value?.id,
-      "metier_id": "", //selectedMetier?.value?.id,
-      "phone_number": "", //tel,
-    };
-    try {
-      isLoading(true);
-      final response = await _ouvriersRepository.rechercheOuvriers(
-        researchedData,
-      );
-    } catch (e) {
-      print("Error searching: ${e}");
-      throw Exception("Erreur searching ${e.toString()}");
-    } finally {
-      isLoading(false);
+    if (rechercheKeyForm.currentState!.validate()) {
+      rechercheKeyForm.currentState!.save();
+
+      var tel = telephone.text.trim();
+      var regionSelected = (selectedRegion?.value?.id != null)
+          ? selectedRegion?.value?.id
+          : "";
+      var departementSelected = (selectedDepartement?.value?.id != null)
+          ? selectedDepartement?.value?.id
+          : "";
+      var domaineSelected = (selectedDomaine?.value?.id != null)
+          ? selectedDomaine?.value?.id
+          : "";
+      var metierSelected = (selectedMetier?.value?.id != null)
+          ? selectedMetier?.value?.id
+          : "";
+      final researchedData = {
+        "region_id": regionSelected,
+        "departement_id": departementSelected,
+        "domaine_id": domaineSelected,
+        "metier_id": metierSelected,
+        "phone_number": tel,
+      };
+      try {
+        isLoading(true);
+        final response = await _ouvriersRepository.rechercheOuvriers(
+          researchedData,
+        );
+        ouvrierList.assignAll([response]);
+      } catch (e) {
+        print("Error searching: ${e}");
+        throw Exception("Erreur searching ${e.toString()}");
+      } finally {
+        isLoading(false);
+      }
     }
+  }
+
+  void resetForm() {
+    telephone.clear();
+
+    selectedDepartement.value = null;
+
+    selectedRegion.value = null;
+
+    selectedDomaine.value = null;
+
+    selectedMetier.value = null;
   }
 }

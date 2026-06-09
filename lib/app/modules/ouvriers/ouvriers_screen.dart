@@ -1,3 +1,6 @@
+import 'package:ciilaabokk_ouvrier_user/app/data/models/departement.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/models/domaine.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/models/metier.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/region.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/login/login_screen.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/ouvrier/ouvrierScreen.dart';
@@ -22,6 +25,7 @@ class OuvriersScreen extends StatelessWidget {
     //final VentesController controller = Get.put(VentesController());
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -127,276 +131,521 @@ class OuvriersScreen extends StatelessWidget {
       ),
       backgroundColor: Color(0xFFF5F5F5),
 
-      body: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.all(4),
-            child: Padding(
-              padding: const EdgeInsets.all(4),
-              child: Row(
-                children: [Text("${controller.authProvider.user.user?.name}")],
-              ),
-            ),
-          ),
-          SizedBox(height: 2),
-
-          Obx(() {
-            if (controller.ouvrierList.isEmpty) {
-              return SizedBox.shrink();
-            }
-            return Card(
-              elevation: 4,
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(24),
-                child: Form(
-                  // key: controller.rechercheKeyForm,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "Recherche",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 173, 253),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Obx(
+                () => controller.ouvrierList.isEmpty
+                    ? const SizedBox.shrink()
+                    : Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 1,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 30),
-                      Obx(
-                        () => DropdownButtonFormField<Region>(
-                          value: controller.selectedRegion.value,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.category,
-                              color: Color.fromARGB(255, 0, 173, 253),
-                            ),
-                            labelText: "Sélectionner une Région",
-                            labelStyle: TextStyle(
-                              color: Color.fromARGB(255, 0, 173, 253),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          items: controller.regionlist.isNotEmpty
-                              ? controller.regionlist.map((region)
-                                // produitList.isNotEmpty
-                                // ? produitList.map((produit)
-                                {
-                                  return DropdownMenuItem<Region>(
-                                    value: region,
-                                    child: Text(
-                                      region!.name!,
-                                      style: TextStyle(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: SingleChildScrollView(
+                            child: Form(
+                              key: controller.rechercheKeyForm,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Recherche",
+                                    style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 0, 173, 253),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(height: 30),
+                                  Obx(
+                                    () => DropdownButtonFormField<Region>(
+                                      value: controller.selectedRegion.value,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(
+                                          Icons.category,
+                                          color: Color.fromARGB(
+                                            255,
+                                            0,
+                                            173,
+                                            253,
+                                          ),
+                                        ),
+                                        labelText: "Sélectionner une Région",
+                                        labelStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                            255,
+                                            0,
+                                            173,
+                                            253,
+                                          ),
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                      items: controller.regionlist.isNotEmpty
+                                          ? controller.regionlist.map((region) {
+                                              return DropdownMenuItem<Region>(
+                                                value: region,
+                                                child: Text(
+                                                  region!.name!,
+                                                  style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                      255,
+                                                      0,
+                                                      173,
+                                                      253,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList()
+                                          : [],
+                                      onChanged: (value) {
+                                        controller.selectedRegion.value =
+                                            value!;
+                                        print(
+                                          "Selected Region Screen: ${controller.selectedRegion.value!.id}",
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Obx(
+                                    () => DropdownButtonFormField<Departement>(
+                                      value:
+                                          controller.selectedDepartement.value,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(
+                                          Icons.category,
+                                          color: Color.fromARGB(
+                                            255,
+                                            0,
+                                            173,
+                                            253,
+                                          ),
+                                        ),
+                                        labelText:
+                                            "Sélectionner un Département",
+                                        labelStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                            255,
+                                            0,
+                                            173,
+                                            253,
+                                          ),
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                      items:
+                                          controller.departementList.isNotEmpty
+                                          ? controller.departementList.map((
+                                              departement,
+                                            ) {
+                                              return DropdownMenuItem<
+                                                Departement
+                                              >(
+                                                value: departement,
+                                                child: Text(
+                                                  departement!.name!,
+                                                  style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                      255,
+                                                      0,
+                                                      173,
+                                                      253,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList()
+                                          : [],
+
+                                      onChanged: (value) {
+                                        controller.selectedDepartement.value =
+                                            value!;
+                                        print(
+                                          "Selected Departement Screen: ${controller.selectedDepartement.value!.id}",
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Obx(
+                                    () => DropdownButtonFormField<Domaine>(
+                                      value: controller.selectedDomaine.value,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(
+                                          Icons.category,
+                                          color: Color.fromARGB(
+                                            255,
+                                            0,
+                                            173,
+                                            253,
+                                          ),
+                                        ),
+                                        labelText: "Sélectionner un Domaine",
+                                        labelStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                            255,
+                                            0,
+                                            173,
+                                            253,
+                                          ),
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                      items: controller.domaineList.isNotEmpty
+                                          ? controller.domaineList.map((
+                                              domaine,
+                                            ) {
+                                              return DropdownMenuItem<Domaine>(
+                                                value: domaine,
+                                                child: Text(
+                                                  domaine!.name!,
+                                                  style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                      255,
+                                                      0,
+                                                      173,
+                                                      253,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList()
+                                          : [],
+
+                                      onChanged: (value) {
+                                        controller.selectedDomaine.value =
+                                            value!;
+                                        print(
+                                          "Selected Domaine Screen: ${controller.selectedDomaine.value!.id}",
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Obx(
+                                    () => DropdownButtonFormField<Metier>(
+                                      value: controller.selectedMetier.value,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(
+                                          Icons.category,
+                                          color: Color.fromARGB(
+                                            255,
+                                            0,
+                                            173,
+                                            253,
+                                          ),
+                                        ),
+                                        labelText: "Sélectionner un Métier  ",
+                                        labelStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                            255,
+                                            0,
+                                            173,
+                                            253,
+                                          ),
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                      items: controller.metierList.isNotEmpty
+                                          ? controller.metierList.map((metier) {
+                                              return DropdownMenuItem<Metier>(
+                                                value: metier,
+                                                child: Text(
+                                                  metier!.name!,
+                                                  style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                      255,
+                                                      0,
+                                                      173,
+                                                      253,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList()
+                                          : [],
+
+                                      onChanged: (value) {
+                                        controller.selectedMetier.value = value;
+                                        print(
+                                          "Selected Metier Screen: ${controller.selectedMetier.value!.id}",
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  TextFormField(
+                                    validator: (value) {
+                                      // if (value!.isEmpty) {
+                                      //   return "Recherche par téléphone";
+                                      // }
+                                      // return null;
+                                    },
+                                    controller: controller.telephone,
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(
+                                        Icons.lock,
                                         color: Color.fromARGB(255, 0, 173, 253),
                                       ),
+                                      labelText: "Recherche par téléphone",
+                                      labelStyle: TextStyle(
+                                        color: Color.fromARGB(255, 0, 173, 253),
+                                      ),
+                                      // errorText: controller.telephone
+                                      //     ? null
+                                      //     : "Numéro de téléphone invalide",
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide.none,
+                                      ),
                                     ),
-                                  );
-                                }).toList()
-                              : [],
-
-                          onChanged: (value) {
-                            controller.selectedRegion.value = value!;
-                            print(
-                              "Selected Region Screen: ${controller.selectedRegion.value!.id}",
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Svp veuillez remplir le champs";
-                          }
-                          return null;
-                        },
-                        controller: controller.telephone,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Color.fromARGB(255, 0, 173, 253),
-                          ),
-                          labelText: "Mot de passe",
-                          labelStyle: TextStyle(
-                            color: Color.fromARGB(255, 0, 173, 253),
-                          ),
-                          // errorText: controller.is.value
-                          //     ? null
-                          //     : "Mot de passe invalide",
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        obscureText: true,
-                      ),
-                      SizedBox(height: 20),
-                      Obx(
-                        () => controller.isLoading.value
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                  color: Color.fromARGB(255, 0, 173, 253),
-                                ),
-                              )
-                            : ElevatedButton(
-                                onPressed: () => {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color.fromARGB(
-                                    255,
-                                    0,
-                                    173,
-                                    253,
                                   ),
-                                  foregroundColor: Colors.white,
-                                  padding: EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                  SizedBox(height: 20),
+                                  Obx(
+                                    () => controller.isLoading.value
+                                        ? Center(
+                                            child: CircularProgressIndicator(
+                                              color: Color.fromARGB(
+                                                255,
+                                                0,
+                                                173,
+                                                253,
+                                              ),
+                                            ),
+                                          )
+                                        : ElevatedButton(
+                                            onPressed: () => {
+                                              controller.searchedOuvriers(),
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Color.fromARGB(
+                                                255,
+                                                0,
+                                                173,
+                                                253,
+                                              ),
+                                              foregroundColor: Colors.white,
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 16,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              "Rechercher",
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ),
                                   ),
-                                ),
-                                child: Text(
-                                  "Se connecter",
-                                  style: TextStyle(fontSize: 18),
-                                ),
+                                  SizedBox(height: 20),
+                                  TextButton(
+                                    onPressed: () => {controller.resetForm()},
+                                    child: Text(
+                                      "Réinitialiser",
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 173, 253),
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                      ),
-                      SizedBox(height: 20),
-                      TextButton(
-                        onPressed: () => {},
-                        child: Text(
-                          "Créer un compte",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 0, 173, 253),
-                            fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
               ),
-            );
-          }),
-          SizedBox(height: 2),
-          Expanded(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return Center(child: CircularProgressIndicator());
-              }
-              // Default widget if none of the above conditions are met
-              return ListView.builder(
-                itemCount: controller.ouvrierList.length,
-                itemBuilder: (context, index) {
-                  final ouvriers = controller.ouvrierList[index];
-                  return Column(
-                    children: ouvriers.ouvriers.map((o) {
-                      return Card(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        child: ListTile(
-                          onTap: () => {Get.to(Ouvrierscreen(), arguments: o)},
-                          title: Text(
-                            o.name!,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 2),
+
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                // Default widget if none of the above conditions are met
+                return ListView.builder(
+                  //
+                  itemCount: controller.ouvrierList.length,
+                  itemBuilder: (context, index) {
+                    final ouvriers = controller.ouvrierList[index];
+                    return Column(
+                      children: ouvriers.ouvriers.map((o) {
+                        return Card(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
                           ),
-                          subtitle: Text.rich(
-                            TextSpan(
-                              style: TextStyle(color: Colors.black),
+                          child: ListTile(
+                            onTap: () => {
+                              Get.to(Ouvrierscreen(), arguments: o),
+                            },
+                            title: Text(
+                              o.name!,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text.rich(
+                              TextSpan(
+                                style: TextStyle(color: Colors.black),
+                                children: [
+                                  TextSpan(text: 'Metier: ${o.metier?.name}\n'),
+                                  TextSpan(
+                                    text: 'Domaine: ${o.domaine?.name}\n',
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        'Departement: ${o.departement?.name}\n',
+                                  ),
+                                  TextSpan(
+                                    text: '\Region:${o.region?.name}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            leading: CircleAvatar(
+                              backgroundColor: Color.fromARGB(255, 0, 173, 253),
+                              child: Text(
+                                o.name![0],
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                TextSpan(text: 'Metier: ${o.metier?.name}\n'),
-                                TextSpan(text: 'Domaine: ${o.domaine?.name}\n'),
-                                TextSpan(
-                                  text: 'Departement: ${o.departement?.name}\n',
-                                ),
-                                TextSpan(
-                                  text: '\Region:${o.region?.name}',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                                // IconButton(
+                                //   icon: Icon(
+                                //     Icons.remove_red_eye_outlined,
+                                //     color: Color.fromARGB(255, 4, 38, 255),
+                                //   ),
+                                //   onPressed: () async {
+                                //     try {
+                                //       // if (v.produit == null) {
+                                //       //   produitFromVenteList = null;
+                                //       // } else {
+                                //       //   produitFromVenteList =
+                                //       //       await produitController.getProduit(
+                                //       //         v.produit.id,
+                                //       //       );
+                                //       //   logger.w(
+                                //       //     "Produit: ${produitFromVenteList == null}",
+                                //       //   );
+
+                                //       logger.i(
+                                //         "ok pour voir les infos de l'ouvriers",
+                                //       );
+                                //       // Get.to(
+                                //       //   () => VenteScreen(),
+                                //       //   arguments: {
+                                //       //     "vente": v,
+                                //       //     "produit": produitFromVenteList,
+                                //       //   },
+                                //       // );
+                                //     } catch (e) {
+                                //       throw errorMessage("${e.toString()}");
+                                //     } finally {
+                                //       controller.isLoading(false);
+                                //     }
+                                //     // verifier si le produit de la vente existe dans produitList;
+                                //   },
+                                // ),
+                                // IconButton(
+                                //   icon: Icon(Icons.delete, color: Colors.red),
+                                //   onPressed: () {
+                                //     logger.i("ok pour la suppression ");
+                                //     // controller.deleteVente(v.id!);
+                                //   },
+                                // ),
                               ],
                             ),
                           ),
-                          leading: CircleAvatar(
-                            backgroundColor: Color.fromARGB(255, 0, 173, 253),
-                            child: Text(
-                              o.name![0],
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // IconButton(
-                              //   icon: Icon(
-                              //     Icons.remove_red_eye_outlined,
-                              //     color: Color.fromARGB(255, 4, 38, 255),
-                              //   ),
-                              //   onPressed: () async {
-                              //     try {
-                              //       // if (v.produit == null) {
-                              //       //   produitFromVenteList = null;
-                              //       // } else {
-                              //       //   produitFromVenteList =
-                              //       //       await produitController.getProduit(
-                              //       //         v.produit.id,
-                              //       //       );
-                              //       //   logger.w(
-                              //       //     "Produit: ${produitFromVenteList == null}",
-                              //       //   );
-
-                              //       logger.i(
-                              //         "ok pour voir les infos de l'ouvriers",
-                              //       );
-                              //       // Get.to(
-                              //       //   () => VenteScreen(),
-                              //       //   arguments: {
-                              //       //     "vente": v,
-                              //       //     "produit": produitFromVenteList,
-                              //       //   },
-                              //       // );
-                              //     } catch (e) {
-                              //       throw errorMessage("${e.toString()}");
-                              //     } finally {
-                              //       controller.isLoading(false);
-                              //     }
-                              //     // verifier si le produit de la vente existe dans produitList;
-                              //   },
-                              // ),
-                              // IconButton(
-                              //   icon: Icon(Icons.delete, color: Colors.red),
-                              //   onPressed: () {
-                              //     logger.i("ok pour la suppression ");
-                              //     // controller.deleteVente(v.id!);
-                              //   },
-                              // ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  );
-                },
-              );
-            }),
-          ),
-        ],
+                        );
+                      }).toList(),
+                    );
+                  },
+                );
+              }),
+            ),
+          ],
+        ),
       ),
+      // Container(
+      //   margin: EdgeInsets.all(4),
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(4),
+      //     child: Row(
+      //       children: [Text("${controller.authProvider.user.user?.name}")],
+      //     ),
+      //   ),
+      // ),
+      // SizedBox(height: 30),
     );
   }
 }

@@ -52,6 +52,7 @@ class OuvriersRepository {
   Future<OuvrierInfo> listOuvriers() async {
     final response = await _apiProvider.get(ouvriersListEndpoint);
     print("Response: ${response}");
+    print("Response: ${response["domaines"]}");
     //final ventesResponse = VenteResponse.fromJson(response.data);
     return OuvrierInfo.fromJson(response);
   }
@@ -69,6 +70,7 @@ class OuvriersRepository {
       '$rechercheOuvriersListEndpoint?$params',
     );
     print("Response recherche: ${response}");
+    return OuvrierInfo.fromJson(response);
 
     //fromJson(response['produit']);
   }
