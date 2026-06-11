@@ -14,12 +14,14 @@ final logger = Logger();
 
 class Ouvrierscreen extends StatelessWidget {
   // const OuvriersScreen({super.key});
-
-  final OuvrierController controller = Get.find<OuvrierController>();
+  final OuvrierController controller = Get.put(OuvrierController());
   // final Ouvrier ouvrier = Get.arguments as Ouvrier;
   @override
   Widget build(BuildContext context) {
-    print("arguments: ${controller.ouvrier.toString()}");
+    print("OuvrierfromParams: ${Get.arguments}");
+    final ouvrier = Get.arguments['ouvrier'];
+    controller.ouvrier.add(ouvrier);
+    // print("arguments: ${controller.ouvrier.toString()}");
     //final VentesController controller = Get.put(VentesController());
 
     return Scaffold(
@@ -130,142 +132,215 @@ class Ouvrierscreen extends StatelessWidget {
 
       body: Column(
         children: [
-          Container(
-            margin: EdgeInsets.all(4),
-            child: Padding(
-              padding: const EdgeInsets.all(4),
-              child: Row(
-                children: [Text("${controller.authProvider.user.user?.name}")],
-              ),
-            ),
-          ),
-          SizedBox(height: 2),
-
-          Obx(() {
-            if (controller.ouvrier.isEmpty) {
-              return SizedBox.shrink();
-            }
-            return Card(
-              elevation: 4,
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: ListTile(
-                title: Text(
-                  "Liste des ouvriers",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text.rich(
-                  TextSpan(
-                    style: TextStyle(color: Colors.black),
-                    children: [
-                      TextSpan(text: 'Vente total: ${controller.ouvrier}'),
-                      TextSpan(text: 'Réparation: ${controller.ouvrier}'),
-                      TextSpan(text: 'Dépense total:${controller.ouvrier}'),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
-          SizedBox(height: 2),
+          // Container(
+          //   margin: EdgeInsets.all(4),
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(4),
+          //     child: Row(
+          //       children: [Text("${controller.authProvider.user.user?.name}")],
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(height: 2),
+          // Obx(() {
+          //   margin:
+          //   EdgeInsets.symmetric(vertical: 30);
+          //   if (controller.ouvrier.isEmpty) {
+          //     return SizedBox.shrink();
+          //   }
+          //   return Card(
+          //     elevation: 4,
+          //     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          //     child: ListTile(
+          //       title: Text(
+          //         "${ouvrier.name}",
+          //         style: TextStyle(fontWeight: FontWeight.bold),
+          //       ),
+          //       subtitle: Text.rich(
+          //         TextSpan(
+          //           style: TextStyle(color: Colors.black),
+          //           children: [
+          //             TextSpan(text: '${ouvrier.metier.name}\n'),
+          //             TextSpan(text: '${ouvrier.domaine.name}\n'),
+          //             TextSpan(text: '${ouvrier.departement.name}'),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   );
+          // }),
+          // SizedBox(height: 2),
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
                 return Center(child: CircularProgressIndicator());
               }
               // Default widget if none of the above conditions are met
-              return ListView.builder(
-                itemCount: controller.ouvrier.length,
-                itemBuilder: (context, index) {
-                  final ouvriers = controller.ouvrier[index];
-                  return Column(
-                    children: ouvriers.ouvriers.map((o) {
-                      return Card(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        child: ListTile(
-                          onTap: () => {Get.to(HomePage())},
-                          title: Text(
-                            o.name!,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text.rich(
-                            TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              children: [
-                                TextSpan(text: 'Metier: ${o.metier?.name}\n'),
-                                TextSpan(text: 'Domaine: ${o.domaine?.name}\n'),
-                                TextSpan(
-                                  text: 'Departement: ${o.departement?.name}\n',
-                                ),
-                                TextSpan(
-                                  text: '\Region:${o.region?.name}',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                          leading: CircleAvatar(
-                            backgroundColor: Color.fromARGB(255, 0, 173, 253),
-                            child: Text(
-                              o.name![0],
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // IconButton(
-                              //   icon: Icon(
-                              //     Icons.remove_red_eye_outlined,
-                              //     color: Color.fromARGB(255, 4, 38, 255),
-                              //   ),
-                              //   onPressed: () async {
-                              //     try {
-                              //       // if (v.produit == null) {
-                              //       //   produitFromVenteList = null;
-                              //       // } else {
-                              //       //   produitFromVenteList =
-                              //       //       await produitController.getProduit(
-                              //       //         v.produit.id,
-                              //       //       );
-                              //       //   logger.w(
-                              //       //     "Produit: ${produitFromVenteList == null}",
-                              //       //   );
+              // return ListView.builder(
+              //   itemCount: controller.ouvrier.length,
+              //   itemBuilder: (context, index) {
+              // final vente = controller.ouvrier[index];
+              // return Column(
+              //   children: [
+              // var total = (v.prix!) * (v.nombre!);
 
-                              //       logger.i(
-                              //         "ok pour voir les infos de l'ouvriers",
-                              //       );
-                              //       // Get.to(
-                              //       //   () => VenteScreen(),
-                              //       //   arguments: {
-                              //       //     "vente": v,
-                              //       //     "produit": produitFromVenteList,
-                              //       //   },
-                              //       // );
-                              //     } catch (e) {
-                              //       throw errorMessage("${e.toString()}");
-                              //     } finally {
-                              //       controller.isLoading(false);
-                              //     }
-                              //     // verifier si le produit de la vente existe dans produitList;
-                              //   },
-                              // ),
-                              // IconButton(
-                              //   icon: Icon(Icons.delete, color: Colors.red),
-                              //   onPressed: () {
-                              //     logger.i("ok pour la suppression ");
-                              //     // controller.deleteVente(v.id!);
-                              //   },
-                              // ),
-                            ],
+              return Card(
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
+                child: ListTile(
+                  title: Text(
+                    "${ouvrier.name}",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                  subtitle: Text.rich(
+                    TextSpan(
+                      style: TextStyle(color: Colors.black),
+                      children: [
+                        TextSpan(
+                          text: 'Metier: ${ouvrier.metier.name}\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                         ),
-                      );
-                    }).toList(),
-                  );
-                },
+                        TextSpan(
+                          text: 'Domaine: ${ouvrier.domaine.name}\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Téléphone: ${ouvrier.phoneNumber}\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Departement: ${ouvrier.departement.name}\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Region: ${ouvrier.region.name}\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Adresse:${ouvrier.adress}\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Entreprises: ${ouvrier.entreprises}\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+
+                        TextSpan(
+                          text: 'Email: ${ouvrier.email}\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Téléphone_2: ${ouvrier.phoneNumber2}\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text:
+                              '\nAnnées expériences:${ouvrier.anneeExperience} ans',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  leading: CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 0, 173, 253),
+                    child: Text(
+                      "${ouvrier.name[0]}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                //   ),
+                // ],
+              );
+              //   },
+              // );
+            }),
+          ),
+          Expanded(
+            child: Obx(() {
+              padding:
+              EdgeInsets.symmetric(vertical: -10);
+              print("Portfolio  lengh : ${ouvrier.portfolios.length}");
+              if (ouvrier.portfolios.isEmpty) {
+                return const Center(
+                  child: Text("Aucun élément dans le portfolio"),
+                );
+              }
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+
+                children: [
+                  const Text(
+                    "Portfolio",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 6),
+                  Expanded(
+                    child: GridView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+
+                      itemCount: ouvrier.portfolios.length,
+
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+
+                            crossAxisSpacing: 10,
+
+                            mainAxisSpacing: 10,
+                          ),
+
+                      itemBuilder: (context, index) {
+                        var portfolios = ouvrier.portfolios;
+                        return GestureDetector(
+                          onTap: () {
+                            // Get.to(FullScreenImage(imageUrl: images[index]));
+                          },
+
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+
+                            child: Image.network(
+                              // ouvrier[index],
+                              "http://10.0.2.2:8000/storage/${portfolios[index]?.image}",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             }),
           ),

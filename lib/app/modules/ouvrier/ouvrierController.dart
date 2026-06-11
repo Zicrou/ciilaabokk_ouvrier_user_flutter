@@ -16,7 +16,7 @@ class OuvrierController extends GetxController {
   final auth_services = Get.find<AuthServices>();
   final authControler = Get.find<AuthController>();
   final authProvider = Get.find<AuthProvider>();
-  var ouvrier = <OuvrierInfo>[].obs;
+  var ouvrier = <Ouvrier>[].obs;
   //RxList<VenteInfo> listeVentes = <VenteInfo>[].obs;
   // Rx<VenteResponse?> venteResponse = Rx<VenteResponse?>(null);
   // final OuvriersRepository _ouvriersRepository = Get.find<OuvriersRepository>();
@@ -25,11 +25,15 @@ class OuvrierController extends GetxController {
   void onInit() {
     super.onInit();
     // Initialize any necessary data or state here
-    final args = Get.arguments;
+    // final args = Get.arguments;
+    print("Arguments: ${Get.arguments}");
 
-    if (args == null && args['ouvrier'] != null) {
-      print({args['ouvrier']});
-    }
+    // if (args == null) {
+    //   // print({args['produit']});
+    // } else if (args['ouvrier'] != null) {
+    //   ouvrier.add(args['ouvrier']);
+    //   print("Arguments on Inti : ${args}");
+    // }
   }
 
   Future<void> showOuvrier(Ouvrier ouvrier) async {

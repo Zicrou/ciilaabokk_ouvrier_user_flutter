@@ -601,9 +601,13 @@ class OuvriersScreen extends StatelessWidget {
                 if (controller.isLoading.value) {
                   return Center(child: CircularProgressIndicator());
                 }
-                print(
-                  "ouvrierList is empty: ${controller.ouvrierList[0].ouvriers.isEmpty}",
-                );
+                // print(
+                //   "ouvrierList is empty: ${controller.ouvrierList[0].ouvriers.isEmpty}",
+                // );
+
+                if (controller.ouvrierList.isEmpty) {
+                  return Center(child: CircularProgressIndicator());
+                }
                 if (controller.ouvrierList[0].ouvriers.isEmpty) {
                   return Column(
                     children: [
@@ -635,7 +639,11 @@ class OuvriersScreen extends StatelessWidget {
                           ),
                           child: ListTile(
                             onTap: () => {
-                              Get.to(Ouvrierscreen(), arguments: o),
+                              print("Sending: ${o}"),
+                              Get.to(
+                                Ouvrierscreen(),
+                                arguments: {"ouvrier": o},
+                              ),
                             },
                             title: Text(
                               "${o.name!} ${o.phoneNumber}",

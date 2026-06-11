@@ -54,7 +54,7 @@ class OuvriersRepository {
   Future<OuvrierInfo> listOuvriers() async {
     final response = await _apiProvider.get(ouvriersListEndpoint);
     print("Response: ${response}");
-    print("Response: ${response["domaines"]}");
+    // print("Response: ${response["ouvrier"]["portfolio"]}");
     //final ventesResponse = VenteResponse.fromJson(response.data);
     return OuvrierInfo.fromJson(response);
   }

@@ -2,7 +2,9 @@ import 'package:ciilaabokk_ouvrier_user/app/data/models/country.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/departement.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/domaine.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/metier.dart';
+import 'package:ciilaabokk_ouvrier_user/app/data/models/portfolio.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/region.dart';
+import 'package:get/get.dart';
 
 class Ouvrier {
   String? id;
@@ -31,6 +33,7 @@ class Ouvrier {
   Country? country;
   Region? region;
   Departement? departement;
+  RxList<Portfolio>? portfolios = <Portfolio>[].obs;
 
   Ouvrier({
     this.id,
@@ -59,6 +62,7 @@ class Ouvrier {
     this.departement,
     this.domaine,
     this.metier,
+    this.portfolios,
   });
 
   Ouvrier.fromJson(Map<String, dynamic> json) {
@@ -94,6 +98,12 @@ class Ouvrier {
     departement = json['departement'] != null
         ? Departement.fromJson(json['departement'])
         : null;
+    if (json['portfolio'] != null) {
+      portfolios = portfolios;
+      json['portfolio'].forEach((p) {
+        portfolios!.add(new Portfolio.fromJson(p));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -111,6 +121,6 @@ class Ouvrier {
 
   @override
   String toString() {
-    return "Id: ${id}, Name: ${name}, Phone number: ${phoneNumber}, Email: ${email}, DeletedAt: ${deletedAt}, CreatedAt: ${createdAt}, UpdatedAt: ${updatedAt}, Avatar: ${avatar}, ";
+    return "Id: ${id}, Name: ${name}, Phone number: ${phoneNumber}, Email: ${email}, DeletedAt: ${deletedAt}, CreatedAt: ${createdAt}, UpdatedAt: ${updatedAt}, Avatar: ${avatar}, Portfolio: ${portfolios.toString()}";
   }
 }
