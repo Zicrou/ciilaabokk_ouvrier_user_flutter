@@ -15,14 +15,11 @@ final logger = Logger();
 class Ouvrierscreen extends StatelessWidget {
   // const OuvriersScreen({super.key});
   final OuvrierController controller = Get.put(OuvrierController());
-  // final Ouvrier ouvrier = Get.arguments as Ouvrier;
   @override
   Widget build(BuildContext context) {
     print("OuvrierfromParams: ${Get.arguments}");
-    final ouvrier = Get.arguments['ouvrier'];
-    controller.ouvrier.add(ouvrier);
-    // print("arguments: ${controller.ouvrier.toString()}");
-    //final VentesController controller = Get.put(VentesController());
+    final ouvrier = Get.arguments['ouvrier'] as Ouvrier;
+    controller.ouvrier.assign(ouvrier);
 
     return Scaffold(
       drawer: Drawer(
@@ -132,165 +129,137 @@ class Ouvrierscreen extends StatelessWidget {
 
       body: Column(
         children: [
-          // Container(
-          //   margin: EdgeInsets.all(4),
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(4),
-          //     child: Row(
-          //       children: [Text("${controller.authProvider.user.user?.name}")],
-          //     ),
-          //   ),
-          // ),
-          // SizedBox(height: 2),
-          // Obx(() {
-          //   margin:
-          //   EdgeInsets.symmetric(vertical: 30);
-          //   if (controller.ouvrier.isEmpty) {
-          //     return SizedBox.shrink();
-          //   }
-          //   return Card(
-          //     elevation: 4,
-          //     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          //     child: ListTile(
-          //       title: Text(
-          //         "${ouvrier.name}",
-          //         style: TextStyle(fontWeight: FontWeight.bold),
-          //       ),
-          //       subtitle: Text.rich(
-          //         TextSpan(
-          //           style: TextStyle(color: Colors.black),
-          //           children: [
-          //             TextSpan(text: '${ouvrier.metier.name}\n'),
-          //             TextSpan(text: '${ouvrier.domaine.name}\n'),
-          //             TextSpan(text: '${ouvrier.departement.name}'),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   );
-          // }),
-          // SizedBox(height: 2),
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
                 return Center(child: CircularProgressIndicator());
               }
+
+              if (controller.ouvrier.isEmpty) {
+                return Center(child: const Text("Pas d'ouvrier"));
+              }
               // Default widget if none of the above conditions are met
-              // return ListView.builder(
-              //   itemCount: controller.ouvrier.length,
-              //   itemBuilder: (context, index) {
-              // final vente = controller.ouvrier[index];
-              // return Column(
-              //   children: [
-              // var total = (v.prix!) * (v.nombre!);
+              return ListView.builder(
+                itemCount: controller.ouvrier.length,
+                itemBuilder: (context, index) {
+                  final ouvrier = controller.ouvrier[index];
+                  return Column(
+                    children: {
+                      Card(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 1,
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            "${ouvrier.name}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                            ),
+                          ),
+                          subtitle: Text.rich(
+                            TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              children: [
+                                TextSpan(
+                                  text: 'Metier: ${ouvrier.metier?.name}\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Domaine: ${ouvrier.domaine?.name}\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Téléphone: ${ouvrier.phoneNumber}\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text:
+                                      'Departement: ${ouvrier.departement?.name}\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Region: ${ouvrier.region?.name}\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Adresse:${ouvrier.adress}\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Entreprises: ${ouvrier.entreprises}\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
 
-              return Card(
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-                child: ListTile(
-                  title: Text(
-                    "${ouvrier.name}",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                  ),
-                  subtitle: Text.rich(
-                    TextSpan(
-                      style: TextStyle(color: Colors.black),
-                      children: [
-                        TextSpan(
-                          text: 'Metier: ${ouvrier.metier.name}\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                                TextSpan(
+                                  text: 'Email: ${ouvrier.email}\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text:
+                                      'Téléphone_2: ${ouvrier.phoneNumber2}\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text:
+                                      '\nAnnées expériences:${ouvrier.anneeExperience} ans',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          leading: CircleAvatar(
+                            backgroundColor: Color.fromARGB(255, 0, 173, 253),
+                            child: Text(
+                              "${ouvrier.name?[0]}",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
-                        TextSpan(
-                          text: 'Domaine: ${ouvrier.domaine.name}\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Téléphone: ${ouvrier.phoneNumber}\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Departement: ${ouvrier.departement.name}\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Region: ${ouvrier.region.name}\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Adresse:${ouvrier.adress}\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Entreprises: ${ouvrier.entreprises}\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-
-                        TextSpan(
-                          text: 'Email: ${ouvrier.email}\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Téléphone_2: ${ouvrier.phoneNumber2}\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        TextSpan(
-                          text:
-                              '\nAnnées expériences:${ouvrier.anneeExperience} ans',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  leading: CircleAvatar(
-                    backgroundColor: Color.fromARGB(255, 0, 173, 253),
-                    child: Text(
-                      "${ouvrier.name[0]}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                //   ),
-                // ],
+                      ),
+                    }.toList(),
+                  );
+                },
               );
-              //   },
-              // );
             }),
           ),
           Expanded(
             child: Obx(() {
-              padding:
-              EdgeInsets.symmetric(vertical: -10);
-              print("Portfolio  lengh : ${ouvrier.portfolios.length}");
-              if (ouvrier.portfolios.isEmpty) {
+              // padding:
+              // EdgeInsets.symmetric(vertical: -10);
+              // print("Portfolio  lengh : ${ouvrier.portfolios.length}");
+              if (ouvrier.portfolios!.isEmpty) {
                 return const Center(
                   child: Text("Aucun élément dans le portfolio"),
                 );
@@ -309,7 +278,7 @@ class Ouvrierscreen extends StatelessWidget {
                     child: GridView.builder(
                       padding: EdgeInsets.symmetric(horizontal: 10),
 
-                      itemCount: ouvrier.portfolios.length,
+                      itemCount: ouvrier.portfolios?.length,
 
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -332,7 +301,7 @@ class Ouvrierscreen extends StatelessWidget {
 
                             child: Image.network(
                               // ouvrier[index],
-                              "http://10.0.2.2:8000/storage/${portfolios[index]?.image}",
+                              "http://10.0.2.2:8000/storage/${portfolios?[index].image}",
                               fit: BoxFit.cover,
                             ),
                           ),
