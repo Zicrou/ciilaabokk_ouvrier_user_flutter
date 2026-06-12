@@ -1,5 +1,6 @@
 import 'package:ciilaabokk_ouvrier_user/app/data/models/ouvrier.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/login/login_screen.dart';
+import 'package:ciilaabokk_ouvrier_user/app/modules/ouvrier/image_preview_screen.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/ouvrier/ouvrierController.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/ouvriers/ouvriersController.dart';
 import 'package:ciilaabokk_ouvrier_user/app/utils/messages.dart';
@@ -291,18 +292,19 @@ class Ouvrierscreen extends StatelessWidget {
 
                       itemBuilder: (context, index) {
                         var portfolios = ouvrier.portfolios;
+                        var imageUrl =
+                            "http://10.0.2.2:8000/storage/${portfolios?[index].image}";
                         return GestureDetector(
                           onTap: () {
-                            // Get.to(FullScreenImage(imageUrl: images[index]));
+                            Get.to(ImagePreviewScreen(imageUrl: imageUrl));
                           },
+                          child: Hero(
+                            tag: imageUrl,
 
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
 
-                            child: Image.network(
-                              // ouvrier[index],
-                              "http://10.0.2.2:8000/storage/${portfolios?[index].image}",
-                              fit: BoxFit.cover,
+                              child: Image.network(imageUrl, fit: BoxFit.cover),
                             ),
                           ),
                         );
