@@ -28,36 +28,36 @@ class OuvrierInfo {
       });
     }
 
-    if (json['domaines'] != null) {
-      domaines = domaines;
-      json['domaines'].forEach((v) {
-        domaines!.add(new Domaine.fromJson(v));
-      });
-      print("Domaines: ${domaines.toString()}");
-    }
-    if (json['metiers'] != null) {
-      metiers = metiers;
-      json['metiers'].forEach((v) {
-        metiers!.add(new Metier.fromJson(v));
-      });
-      print("Metiers: ${metiers.toString()}");
-    }
+    // if (json['domaines'] != null) {
+    //   domaines = domaines;
+    //   json['domaines'].forEach((v) {
+    //     domaines!.add(new Domaine.fromJson(v));
+    //   });
+    //   print("Domaines: ${domaines.toString()}");
+    // }
+    // if (json['metiers'] != null) {
+    //   metiers = metiers;
+    //   json['metiers'].forEach((v) {
+    //     metiers!.add(new Metier.fromJson(v));
+    //   });
+    //   print("Metiers: ${metiers.toString()}");
+    // }
 
-    if (json['regions'] != null) {
-      regions = regions;
-      json['regions'].forEach((v) {
-        regions!.add(new Region.fromJson(v));
-      });
-      print("Regions: ${regions.toString()}");
-    }
+    // if (json['regions'] != null) {
+    //   regions = regions;
+    //   json['regions'].forEach((v) {
+    //     regions!.add(new Region.fromJson(v));
+    //   });
+    //   print("Regions: ${regions.toString()}");
+    // }
 
-    if (json['departements'] != null) {
-      departements = departements;
-      json['departements'].forEach((v) {
-        departements!.add(new Departement.fromJson(v));
-      });
-      print("Departements: ${departements.toString()}");
-    }
+    // if (json['departements'] != null) {
+    //   departements = departements;
+    //   json['departements'].forEach((v) {
+    //     departements!.add(new Departement.fromJson(v));
+    //   });
+    //   print("Departements: ${departements.toString()}");
+    // }
   }
 
   // Map<String, dynamic> toJson() {

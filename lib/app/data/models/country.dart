@@ -1,5 +1,5 @@
 class Country {
-  int? id;
+  String? id;
   String? name;
 
   Country({this.id, this.name});

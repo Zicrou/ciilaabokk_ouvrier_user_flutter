@@ -21,7 +21,7 @@ class Ouvrierscreen extends StatelessWidget {
     print("OuvrierfromParams: ${Get.arguments}");
     final ouvrier = Get.arguments['ouvrier'] as Ouvrier;
     controller.ouvrier.assign(ouvrier);
-
+    print("Controller.ouvrier ${controller.ouvrier[0]..toString()}");
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -143,7 +143,7 @@ class Ouvrierscreen extends StatelessWidget {
               return ListView.builder(
                 itemCount: controller.ouvrier.length,
                 itemBuilder: (context, index) {
-                  final ouvrier = controller.ouvrier[index];
+                  // final ouvrier = controller.ouvrier[0];
                   return Column(
                     children: {
                       Card(
@@ -153,7 +153,7 @@ class Ouvrierscreen extends StatelessWidget {
                         ),
                         child: ListTile(
                           title: Text(
-                            "${ouvrier.name}",
+                            "${controller.ouvrier[0].name}",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 30,
@@ -164,78 +164,185 @@ class Ouvrierscreen extends StatelessWidget {
                               style: TextStyle(color: Colors.black),
                               children: [
                                 TextSpan(
-                                  text: 'Metier: ${ouvrier.metier?.name}\n',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Metier/domaine:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          controller.ouvrier[0].metiers
+                                              ?.map(
+                                                (m) =>
+                                                    '${m.name} / ${m.domaine?.name}\n',
+                                              )
+                                              .join(', ') ??
+                                          '',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                //
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Téléphone:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${controller.ouvrier[0].phoneNumber}\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 TextSpan(
-                                  text: 'Domaine: ${ouvrier.domaine?.name}\n',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Departement:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${controller.ouvrier[0].departement?.name}\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 TextSpan(
-                                  text: 'Téléphone: ${ouvrier.phoneNumber}\n',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      'Departement: ${ouvrier.departement?.name}\n',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'Region: ${ouvrier.region?.name}\n',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'Adresse:${ouvrier.adress}\n',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'Entreprises: ${ouvrier.entreprises}\n',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Region:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${controller.ouvrier[0].region?.name}\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
                                 ),
 
                                 TextSpan(
-                                  text: 'Email: ${ouvrier.email}\n',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Adresse:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: '${controller.ouvrier[0].adress}\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 TextSpan(
-                                  text:
-                                      'Téléphone_2: ${ouvrier.phoneNumber2}\n',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Entreprises:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${controller.ouvrier[0].entreprises?.map((e) => e.name).join(", ") ?? ""}\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 TextSpan(
-                                  text:
-                                      '\nAnnées expériences:${ouvrier.anneeExperience} ans',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Email:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: '${controller.ouvrier[0].email}\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Téléphone_2:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${controller.ouvrier[0].phoneNumber2}\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Années expériences:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${controller.ouvrier[0].anneeExperience} ans',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -243,7 +350,7 @@ class Ouvrierscreen extends StatelessWidget {
                           leading: CircleAvatar(
                             backgroundColor: Color.fromARGB(255, 0, 173, 253),
                             child: Text(
-                              "${ouvrier.name?[0]}",
+                              "${controller.ouvrier[0].name?[0]}",
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -259,8 +366,8 @@ class Ouvrierscreen extends StatelessWidget {
             child: Obx(() {
               // padding:
               // EdgeInsets.symmetric(vertical: -10);
-              // print("Portfolio  lengh : ${ouvrier.portfolios.length}");
-              if (ouvrier.portfolios!.isEmpty) {
+              // print("Portfolio  lengh : ${controller.ouvrier[0].portfolios.length}");
+              if (controller.ouvrier[0].portfolios!.isEmpty) {
                 return const Center(
                   child: Text("Aucun élément dans le portfolio"),
                 );
@@ -279,7 +386,7 @@ class Ouvrierscreen extends StatelessWidget {
                     child: GridView.builder(
                       padding: EdgeInsets.symmetric(horizontal: 10),
 
-                      itemCount: ouvrier.portfolios?.length,
+                      itemCount: controller.ouvrier[0].portfolios?.length,
 
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -291,9 +398,9 @@ class Ouvrierscreen extends StatelessWidget {
                           ),
 
                       itemBuilder: (context, index) {
-                        var portfolios = ouvrier.portfolios;
+                        var portfolios = controller.ouvrier[0].portfolios;
                         var imageUrl =
-                            "http://10.0.2.2:8000/storage/${portfolios?[index].image}";
+                            "http://10.0.2.2:8000/storage/${portfolios?[index].image}"; //http://10.0.2.2:8000
                         return GestureDetector(
                           onTap: () {
                             Get.to(ImagePreviewScreen(imageUrl: imageUrl));

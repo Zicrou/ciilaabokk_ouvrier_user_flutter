@@ -1,5 +1,5 @@
 class Domaine {
-  int? id;
+  String? id;
   String? name;
 
   Domaine({this.id, this.name});

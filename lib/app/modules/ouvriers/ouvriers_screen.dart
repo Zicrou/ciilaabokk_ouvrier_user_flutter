@@ -653,9 +653,11 @@ class OuvriersScreen extends StatelessWidget {
                               TextSpan(
                                 style: TextStyle(color: Colors.black),
                                 children: [
-                                  TextSpan(text: 'Metier: ${o.metier?.name}\n'),
                                   TextSpan(
-                                    text: 'Domaine: ${o.domaine?.name}\n',
+                                    // text: 'Metier: ${o.metiers?.name}\n',
+                                  ),
+                                  TextSpan(
+                                    // text: 'Domaine: ${o.domaines?.name}\n',
                                   ),
                                   TextSpan(
                                     text:

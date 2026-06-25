@@ -1,7 +1,7 @@
 class Departement {
-  int? id;
+  String? id;
   String? name;
-  int? regionId;
+  String? regionId;
 
   Departement({this.id, this.name, this.regionId});
 
