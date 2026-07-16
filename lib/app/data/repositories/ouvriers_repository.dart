@@ -4,6 +4,7 @@ import 'package:ciilaabokk_ouvrier_user/app/data/models/departement.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/metier.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/models/ouvrier_info.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/providers/api_providers.dart';
+import 'package:ciilaabokk_ouvrier_user/services/location_services.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
@@ -52,35 +53,26 @@ class OuvriersRepository {
   // }
 
   Future<OuvrierInfo> listOuvriers() async {
-    final response = await _apiProvider.get(ouvriersListEndpoint);
+    final position = await LocationServices.getCurrentLocation();
+    final response = await _apiProvider.get(
+      '$ouvriersListEndpoint?latitude=${position.latitude}&longitude=${position.longitude}',
+    );
     print("Response: ${response}");
-    // print("Response: ${response["ouvrier"]["portfolio"]}");
-    //final ventesResponse = VenteResponse.fromJson(response.data);
     return OuvrierInfo.fromJson(response);
   }
 
   Future<dynamic> rechercheOuvriers(Map<String, dynamic> json) async {
-    final tel = json["phone_number"];
-    final metierId = json["metier_id"];
-    final domaineId = json["domaine_id"];
-    final departementId = json["departement_id"];
-    final regionId = json["region_id"];
-    print("Params tel: $tel");
-    var params =
-        'phone_number=$tel&metier_id=$metierId&domain_id=$domaineId&departement_id=$departementId&region_id=$regionId';
-    final response = await _apiProvider.get(
-      '$rechercheOuvriersListEndpoint?$params',
+    final response = await _apiProvider.post(
+      '$rechercheOuvriersListEndpoint',
+      json,
     );
     print("Response recherche: ${response}");
+    print("Response recherche: ${response == null}");
     return OuvrierInfo.fromJson(response);
-
-    //fromJson(response['produit']);
   }
 
-  Future<dynamic> selectFilterMetierByDomaine(int? domaine_id) async {
+  Future<dynamic> selectFilterMetierByDomaine(String? domaine_id) async {
     var domaineId = domaine_id;
-    // final regionId = json["region_id"];
-
     var params = 'domaine_id=';
     if (domaineId != null) {
       params = 'domaine_id=$domaineId';
@@ -97,23 +89,27 @@ class OuvriersRepository {
     return res.map((m) => Metier.fromJson(m)).toList();
   }
 
-  Future<dynamic> selectFilterDepartementByRegion(int? region_id) async {
-    var regionId = region_id;
-    // final regionId = json["region_id"];
+  Future<dynamic> selectFilterDepartementByRegion(String? region_id) async {
+    try {
+      var regionId = region_id;
+      // final regionId = json["region_id"];
 
-    var params = 'region_id=';
-    if (regionId != null) {
-      params = 'region_id=$regionId';
+      var params = 'region_id=';
+      if (regionId != null) {
+        params = 'region_id=$regionId';
+      }
+
+      final response = await _apiProvider.get(
+        '$selectFilterRegionEndpoint?$params',
+      );
+      final res = response as List;
+      print("Response filtered departements: ${response}");
+
+      // The return type is List dynamic
+      return res.map((m) => Departement.fromJson(m)).toList();
+    } catch (e, s) {
+      print('Error in selectFilterDepartementByRegion: $e');
+      print(s);
     }
-
-    final response = await _apiProvider.get(
-      '$selectFilterRegionEndpoint?$params',
-    );
-    final res = response as List;
-    print("Response filtered departements: ${response}");
-    print("Response filtered departements: ${response[0]}");
-
-    // The return type is List dynamic
-    return res.map((m) => Departement.fromJson(m)).toList();
   }
 }

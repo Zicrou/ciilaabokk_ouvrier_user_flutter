@@ -16,6 +16,6 @@ const storeLiveEndpoint = '$baseUrl/lives';
 const startLiveEndpoint = '$baseUrl/lives/start';
 
 const ouvriersListEndpoint = '$baseUrl/ouvriers/';
-const rechercheOuvriersListEndpoint = '$baseUrl/ouvriers/rechercher';
+const rechercheOuvriersListEndpoint = '$baseUrl/ouvrier/rechercher';
 const selectFilterDomaineEndpoint = '$baseUrl/filtered/metiers';
 const selectFilterRegionEndpoint = '$baseUrl/filtered/departements';

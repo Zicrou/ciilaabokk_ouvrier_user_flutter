@@ -54,4 +54,14 @@ class OuvrierController extends GetxController {
       isLoading(false);
     }
   }
+
+  String formattedDistance(double? distance) {
+    if (distance == null) return '';
+
+    if (distance < 1) {
+      return '${(distance * 1000).round()} m';
+    }
+
+    return '${distance!.toStringAsFixed(1)} km';
+  }
 }

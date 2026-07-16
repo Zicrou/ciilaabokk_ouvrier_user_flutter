@@ -278,14 +278,20 @@ class Ouvrierscreen extends StatelessWidget {
                                         fontSize: 20,
                                       ),
                                     ),
-                                    TextSpan(
-                                      text:
-                                          '${controller.ouvrier[0].entreprises?.map((e) => e.name).join(", ") ?? ""}\n',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 20,
+                                    if (controller.ouvrier[0].entreprises !=
+                                            null &&
+                                        controller
+                                            .ouvrier[0]
+                                            .entreprises!
+                                            .isNotEmpty)
+                                      TextSpan(
+                                        text:
+                                            '${controller.ouvrier[0].entreprises?.map((e) => e.name).join(", ") ?? ""}\n',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 20,
+                                        ),
                                       ),
-                                    ),
                                   ],
                                 ),
                                 TextSpan(
@@ -337,6 +343,26 @@ class Ouvrierscreen extends StatelessWidget {
                                     TextSpan(
                                       text:
                                           '${controller.ouvrier[0].anneeExperience} ans',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          '\ndistance par rapport à votre position:\n',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${controller.formattedDistance(controller.ouvrier[0].distance)}',
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 20,

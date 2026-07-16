@@ -6,6 +6,7 @@ import 'package:ciilaabokk_ouvrier_user/app/data/models/region.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/providers/auth_providers.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/repositories/ouvriers_repository.dart';
 import 'package:ciilaabokk_ouvrier_user/app/modules/auths/auth_controller.dart';
+import 'package:ciilaabokk_ouvrier_user/services/location_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ciilaabokk_ouvrier_user/app/data/services/auth_services.dart';
@@ -50,7 +51,9 @@ class OuvriersController extends GetxController {
       print("Ouvrier from ouvrierController: ${response}");
       var metiers = response.metiers;
       var domaines = response.domaines;
-      var regions = response.regions;
+      // var regions = response.regions;
+      // print("Response Region: ${response.regions}");
+      // print("Region assigned : ${regions.toString()}");
       var departements = response.departements;
       if (metiers.value != null) {
         for (var metier in metiers) metierList.add(metier);
@@ -59,12 +62,23 @@ class OuvriersController extends GetxController {
         for (var domaine in domaines) domaineList.add(domaine);
       }
 
-      if (regions.value != null) {
-        for (var region in regions) regionlist.add(region);
+      if (response.regions.isNotEmpty) {
+        regionlist.clear();
+        print("Response Region: ${response.regions}");
+        var regions = response.regions;
+        print("Region assigned : ${regions.toString()}");
+        for (var region in regions) {
+          regionlist.add(region);
+        }
       }
 
       if (departements.value != null) {
-        for (var departement in departements) departementList.add(departement);
+        departementList.clear();
+        for (var departement in departements) {
+          departementList.add(departement);
+          print("departements: ${departementList.toString()}");
+        }
+        print("departements: ${departementList.toString()}");
       }
 
       //listeresponse = await _authServices.getAllVentes();
@@ -95,19 +109,27 @@ class OuvriersController extends GetxController {
       var metierSelected = (selectedMetier?.value?.id != null)
           ? selectedMetier?.value?.id
           : "";
+      final position = await LocationServices.getCurrentLocation();
+
       final researchedData = {
         "region_id": regionSelected,
         "departement_id": departementSelected,
         "domaine_id": domaineSelected,
         "metier_id": metierSelected,
         "phone_number": tel,
+        "latitude": position.latitude,
+        "longitude": position.longitude,
       };
+      print("User's latitude: ${position.latitude}");
+      print("User's longitude: ${position.longitude}");
+
       try {
         isLoading(true);
         final response = await _ouvriersRepository.rechercheOuvriers(
           researchedData,
         );
         ouvrierList.assignAll([response]);
+        //
         print("is ouvriers empty : ${ouvrierList[0].ouvriers.isEmpty}");
       } catch (e) {
         print("Error searching: ${e}");
@@ -122,10 +144,15 @@ class OuvriersController extends GetxController {
     var selected_region = selectedRegion.value?.id;
     try {
       isLoading(true);
-      // final response = await _ouvriersRepository
-      //     .selectFilterDepartementByRegion(selected_region);
-      // departementList.assignAll(response);
-      print(departementList.toString());
+      final response = await _ouvriersRepository
+          .selectFilterDepartementByRegion(selected_region);
+      if (response == "") {
+      } else {
+        departementList.assignAll(response);
+      }
+      print(
+        "Liste departements dans filterRegion controller: ${departementList.toString()}",
+      );
     } catch (e) {
       print("Error searching: ${e}");
       throw Exception("Erreur searching ${e.toString()}");
@@ -136,12 +163,13 @@ class OuvriersController extends GetxController {
 
   Future<dynamic> selecFilterDomaine() async {
     var selected_domaine = selectedDomaine.value?.id;
+    // if (selected_domaine != null) {
     try {
       isLoading(true);
-      // final response = await _ouvriersRepository.selectFilterMetierByDomaine(
-      //   selected_domaine,
-      // );
-      // metierList.assignAll(response);
+      final response = await _ouvriersRepository.selectFilterMetierByDomaine(
+        selected_domaine,
+      );
+      metierList.assignAll(response);
       print(metierList.toString());
     } catch (e) {
       print("Error searching: ${e}");
@@ -149,6 +177,7 @@ class OuvriersController extends GetxController {
     } finally {
       isLoading(false);
     }
+    // }
   }
 
   void resetForm() {
@@ -161,5 +190,15 @@ class OuvriersController extends GetxController {
     selectedDomaine.value = null;
 
     selectedMetier.value = null;
+  }
+
+  String formattedDistance(double? distance) {
+    if (distance == null) return '';
+
+    if (distance < 1) {
+      return '${(distance * 1000).round()} m';
+    }
+
+    return '${distance!.toStringAsFixed(1)} km';
   }
 }

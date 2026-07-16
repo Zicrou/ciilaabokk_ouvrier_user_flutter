@@ -16,11 +16,6 @@ class Ouvrier {
   String? createdAt;
   String? updatedAt;
   String? avatar;
-  // String? metierId;
-  // String? domaineId;
-  // String? regionId;
-  // String? departementId;
-  // String? countryId;
   String? phoneNumber2;
   String? adress;
   dynamic dateOfBirth;
@@ -35,7 +30,7 @@ class Ouvrier {
   Region? region;
   Departement? departement;
   List<Portfolio>? portfolios = <Portfolio>[];
-
+  double? distance;
   Ouvrier({
     this.id,
     this.name,
@@ -45,7 +40,6 @@ class Ouvrier {
     this.createdAt,
     this.updatedAt,
     this.avatar,
-
     this.phoneNumber2,
     this.adress,
     this.dateOfBirth,
@@ -60,6 +54,7 @@ class Ouvrier {
     this.domaines,
     this.metiers,
     this.portfolios,
+    this.distance,
   });
 
   Ouvrier.fromJson(Map<String, dynamic> json) {
@@ -76,15 +71,12 @@ class Ouvrier {
       entreprises = (json['entreprises'] as List?)
           ?.map((m) => Entreprises.fromJson(m))
           .toList();
-      // regionId = json["region_id"];
-      // departementId = json["departement_id"];
-      // countryId = json["country_id"];
+
       phoneNumber2 = json["phone_number"];
       adress = json["address"];
       dateOfBirth = json["date_of_birth"];
       photo = json["photo"];
       photoCni = json["photo_cni"];
-
       anneeExperience = json["annees_experience"];
       userId = json["user_id"];
       metiers = (json['metiers'] as List?)
@@ -105,6 +97,9 @@ class Ouvrier {
           portfolios!.add(new Portfolio.fromJson(p));
         });
       }
+      distance = json['distance'] != null
+          ? double.tryParse(json['distance'].toString())
+          : null;
     } catch (e, s) {
       print('Error in Ouvrier.fromJson: $e');
       print(s);
@@ -127,6 +122,6 @@ class Ouvrier {
 
   @override
   String toString() {
-    return "Id: ${id}, Name: ${name}, Phone number: ${phoneNumber}, Email: ${email}, DeletedAt: ${deletedAt}, CreatedAt: ${createdAt}, UpdatedAt: ${updatedAt}, Avatar: ${avatar}, Portfolio: ${portfolios.toString()}";
+    return "Id: ${id}, Name: ${name}, Phone number: ${phoneNumber}, Email: ${email}, DeletedAt: ${deletedAt}, CreatedAt: ${createdAt}, UpdatedAt: ${updatedAt}, Avatar: ${avatar}, Portfolio: ${portfolios.toString()}, distance: ${distance.toString()}";
   }
 }

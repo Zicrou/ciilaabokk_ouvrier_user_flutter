@@ -144,6 +144,7 @@ class OuvriersScreen extends StatelessWidget {
                           horizontal: 16,
                           vertical: 1,
                         ),
+
                         child: Padding(
                           padding: const EdgeInsets.all(24),
                           child: SingleChildScrollView(
@@ -240,11 +241,16 @@ class OuvriersScreen extends StatelessWidget {
                                         print(
                                           "Selected Region Screen: ${controller.selectedRegion.value?.id}",
                                         );
+                                        controller.selectedDepartement.value =
+                                            null;
+
+                                        controller.departementList.clear();
                                         controller.selecFilterRegion();
                                       },
                                     ),
                                   ),
                                   SizedBox(height: 20),
+
                                   Obx(
                                     () => DropdownButtonFormField<Departement>(
                                       value:
@@ -415,6 +421,9 @@ class OuvriersScreen extends StatelessWidget {
                                         print(
                                           "Selected Domaine Screen: ${controller.selectedDomaine.value?.id}",
                                         );
+                                        controller.selectedMetier.value = null;
+
+                                        controller.metierList.clear();
                                         controller.selecFilterDomaine();
                                       },
                                     ),
@@ -497,7 +506,7 @@ class OuvriersScreen extends StatelessWidget {
                                       onChanged: (value) {
                                         controller.selectedMetier.value = value;
                                         print(
-                                          "Selected Metier Screen: ${controller.selectedMetier.value!.id}",
+                                          "Selected Metier Screen: ${controller.selectedMetier.value?.id}",
                                         );
                                       },
                                     ),
@@ -513,7 +522,7 @@ class OuvriersScreen extends StatelessWidget {
                                     controller: controller.telephone,
                                     decoration: InputDecoration(
                                       prefixIcon: Icon(
-                                        Icons.lock,
+                                        Icons.category,
                                         color: Color.fromARGB(255, 0, 173, 253),
                                       ),
                                       labelText: "Recherche par téléphone",
@@ -549,8 +558,64 @@ class OuvriersScreen extends StatelessWidget {
                                             ),
                                           )
                                         : ElevatedButton(
-                                            onPressed: () => {
-                                              controller.searchedOuvriers(),
+                                            onPressed: () {
+                                              // var tel = controller
+                                              //     .telephone
+                                              //     .text
+                                              //     .trim();
+                                              // var regionSelected =
+                                              //     (controller
+                                              //             .selectedRegion
+                                              //             ?.value
+                                              //             ?.id !=
+                                              //         null)
+                                              //     ? controller
+                                              //           .selectedRegion
+                                              //           ?.value
+                                              //           ?.id
+                                              //     : "";
+                                              // var departementSelected =
+                                              //     (controller
+                                              //             .selectedDepartement
+                                              //             ?.value
+                                              //             ?.id !=
+                                              //         null)
+                                              //     ? controller
+                                              //           .selectedDepartement
+                                              //           ?.value
+                                              //           ?.id
+                                              //     : "";
+                                              // var domaineSelected =
+                                              //     (controller
+                                              //             .selectedDomaine
+                                              //             ?.value
+                                              //             ?.id !=
+                                              //         null)
+                                              //     ? controller
+                                              //           .selectedDomaine
+                                              //           ?.value
+                                              //           ?.id
+                                              //     : "";
+                                              // var metierSelected =
+                                              //     (controller
+                                              //             .selectedMetier
+                                              //             ?.value
+                                              //             ?.id !=
+                                              //         null)
+                                              //     ? controller
+                                              //           .selectedMetier
+                                              //           ?.value
+                                              //           ?.id
+                                              //     : "";
+                                              // final researchedData = {
+                                              //   "region_id": regionSelected,
+                                              //   "departement_id":
+                                              //       departementSelected,
+                                              //   "domaine_id": domaineSelected,
+                                              //   "metier_id": metierSelected,
+                                              //   "phone_number": tel,
+                                              // };
+                                              controller.searchedOuvriers();
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: Color.fromARGB(
@@ -654,17 +719,48 @@ class OuvriersScreen extends StatelessWidget {
                                 style: TextStyle(color: Colors.black),
                                 children: [
                                   TextSpan(
-                                    // text: 'Metier: ${o.metiers?.name}\n',
-                                  ),
-                                  TextSpan(
-                                    // text: 'Domaine: ${o.domaines?.name}\n',
+                                    text: 'Metier: ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   TextSpan(
                                     text:
-                                        'Departement: ${o.departement?.name}\n',
+                                        '${o.metiers?.map((m) => m.name).join(", ") ?? ""}\n',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+
+                                  TextSpan(text: 'Domaine: '),
+                                  TextSpan(
+                                    text:
+                                        '${o.metiers?.map((m) => m.domaine?.name).join(", ") ?? ""}\n',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(text: 'Departement: '),
+                                  TextSpan(
+                                    text: '${o.departement?.name}\n',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(text: 'Region: '),
+                                  TextSpan(
+                                    text: '${o.region?.name}\n',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   TextSpan(
-                                    text: '\Region:${o.region?.name}',
+                                    text:
+                                        'Distance par rapport à votre position: ',
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '${controller.formattedDistance(o.distance)}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
